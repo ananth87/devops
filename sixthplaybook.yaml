@@ -1,0 +1,16 @@
+---
+ - hosts: all
+   become: true
+   tasks:
+     - name: Stopping HTTPD
+       service: name="httpd" state=stopped
+       register: httpd_stop
+       
+     - name: Uninstall HTTPD
+       yum: name="httpd" state=absent
+       register: httpd_absent
+      
+     - name: remove /var/www/html
+       shell: rm -rf /var/www/html
+       when: httpd_stop|success and httpd_absent|success
+       

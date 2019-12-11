@@ -1,0 +1,21 @@
+---
+ - hosts: all
+   become: true
+   tasks:
+     - name: installation of httpd package
+       yum: name=httpd state=present
+       register: http_install
+       tags:
+         - abc
+
+     - name: validation of httpd
+       command: ls -al /sbin/httpd
+       register: http_validation
+       tags:
+         - def
+
+     - name: starting httpd service
+       service: name=httpd state=started enabled=yes
+       tags:
+         - xyz
+         - abc

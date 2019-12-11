@@ -1,0 +1,18 @@
+---
+ - hosts: all
+   become: true
+   vars:
+    - pkg: httpd
+
+   tasks:
+     - name: Installation of HTTPD Package
+       yum: name={{pkg}} state=present
+       register: http_install
+
+     - name: Validation of HTTPD Package
+       command: ls -la /sbin/httpd
+       register: http_validation
+
+     - name: Starting HTTPD Service
+       service: name="{{pkg}}" state=started enabled=yes
+       when: http_validation|success and http_install|success

@@ -1,0 +1,20 @@
+---
+ - hosts: group1
+   become: true
+   tasks:
+        - name: Install HTTPD
+          command: yum install httpd -y
+          register: http_check
+          ignore_errors: false
+
+        - name: Restart HTTPD Service
+          command: service httpd restart
+
+        - name: Copy the INDEX file
+          copy:
+             src=/home/ansadmin/index.html
+             dest=/var/www/html/
+
+        - name: Restart HTTPD Service
+          command: service httpd restart
+
